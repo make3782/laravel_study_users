@@ -57,6 +57,13 @@ p {
 
 /* header */
 
+#logout {
+  cursor: default;
+  &:hover {
+    background-color: transparent;
+  }
+}
+
 .navbar-inverse {
   background-color: $navbar-color;
 }
