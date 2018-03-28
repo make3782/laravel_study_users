@@ -24,4 +24,6 @@ Route::get('/signup', 'UsersController@create')->name('signup');
 // restful自动生成路由
 Route::resource('/users', 'UsersController');
 
-// 等同于下列
+Route::get('/login', 'SessionsController@create')->name('login');
+Route::post('/login', 'SessionsController@store')->name('login');
+Route::delete('/logout', 'SessionsController@destory')->name('logout');
