@@ -28,4 +28,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * 生成头像
+     *
+     */
+    public function genavatar($size = 100)
+    {
+        return 'https://b-ssl.duitang.com/uploads/item/201504/04/20150404H3338_N8Wir.jpeg';
+    }
 }
+

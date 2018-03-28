@@ -20,3 +20,8 @@ Route::get('/help', 'StaticPagesController@help')->name('help');
 Route::get('/about', 'StaticPagesController@about')->name('about');
 
 Route::get('/signup', 'UsersController@create')->name('signup');
+
+// restful自动生成路由
+Route::resource('/users', 'UsersController');
+
+// 等同于下列
