@@ -29,6 +29,17 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        // 事件监听
+        // 监听模型在创建前,生成token
+        static::creating(function($user) {
+            $user->activation_token = str_random(30);
+        });
+    }
+
     /**
      * 生成头像
      *

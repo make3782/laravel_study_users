@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use Mail;
 
 class UsersController extends Controller
 {
     public function __construct()
     {
         // 加入中间件:除了新建相关,其他如编辑等需要有登录态
-        $this->middleware('auth', ['except' => ['show', 'create', 'store', 'index']]);
+        $this->middleware('auth', ['except' => ['show', 'create', 'store', 'index', 'confirmEmail']]);
         $this->middleware('guest', ['only' => ['create']]);
     }
 
@@ -54,9 +55,23 @@ class UsersController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        Auth::login($user);
-        session()->flash('success', '欢迎,您将在这里开启一段新的历程');
-        return redirect()->route('users.show', compact('user'));
+        $this->sendEmail($user);
+        session()->flash('success', '验证邮件已发送到你的注册邮箱上，请注意查收');
+        return redirect('/');
+    }
+
+    protected function sendEmail(User $user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'aufree@yousails.com';
+        $name = 'wzx-测试';
+        $to = $user->email;
+        $subject = "感谢注册 Sample 应用！请确认你的邮箱。";
+
+        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
     }
 
     /**
@@ -102,4 +117,22 @@ class UsersController extends Controller
         return back();
     }
 
+    /**
+     * 用户邮件激活请求
+     *
+     * @param string $token 邮件激活token
+     *
+     */
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token', $token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success', '您已成功激活邮件');
+        return redirect()->route('users.show', $user->id);
+    }
 }
