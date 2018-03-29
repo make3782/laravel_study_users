@@ -35,7 +35,8 @@ class User extends Authenticatable
      */
     public function genavatar($size = 100)
     {
-        return 'https://b-ssl.duitang.com/uploads/item/201504/04/20150404H3338_N8Wir.jpeg';
+        return 'https://lccdn.phphub.org/uploads/avatars/6932_1508394867.jpg?imageView2/1/w/100/h/100';
+        // return 'https://b-ssl.duitang.com/uploads/item/201504/04/20150404H3338_N8Wir.jpeg';
     }
 }
 
