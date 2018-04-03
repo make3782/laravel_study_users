@@ -32,9 +32,13 @@ class UsersController extends Controller
         return view('users.create');
     }
 
+    /**
+     * 个人中心首页显示
+     */
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+        $statuses = $user->statuses()->orderBy('created_at', 'desc')->paginate(30);
+        return view('users.show', compact('user', 'statuses'));
     }
 
     /**
@@ -135,4 +139,8 @@ class UsersController extends Controller
         session()->flash('success', '您已成功激活邮件');
         return redirect()->route('users.show', $user->id);
     }
+
+    /**
+     * 获取用户发表的微博
+     */
 }

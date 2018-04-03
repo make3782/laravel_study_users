@@ -49,5 +49,19 @@ class User extends Authenticatable
         return 'https://lccdn.phphub.org/uploads/avatars/6932_1508394867.jpg?imageView2/1/w/100/h/100';
         // return 'https://b-ssl.duitang.com/uploads/item/201504/04/20150404H3338_N8Wir.jpeg';
     }
+
+    /**
+     * 一对多的关系:微博正文
+     */
+    public function statuses() {
+        return $this->hasMany(Status::class);
+    }
+
+    /**
+     * 获取用户发表的微博
+     */
+    public function feed() {
+        return $this->statuses()->orderBy('created_at', 'desc');
+    }
 }
 
